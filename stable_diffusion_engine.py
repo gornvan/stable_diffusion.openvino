@@ -27,6 +27,8 @@ class StableDiffusionEngine:
         self.scheduler = scheduler
         # models
         self.core = Core()
+        self.core.set_property({'CACHE_DIR': './cache'})
+
         # text features
         self._text_encoder = self.core.read_model(
             hf_hub_download(repo_id=model, filename="text_encoder.xml"),
@@ -183,7 +185,7 @@ class StableDiffusionEngine:
             # predict the noise residual
             noise_pred = result(self.unet.infer_new_request({
                 "latent_model_input": latent_model_input,
-                "t": t,
+                "t": np.float64(t),
                 "encoder_hidden_states": text_embeddings
             }))
 
